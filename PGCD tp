@@ -1,0 +1,33 @@
+Définition du PGCD:
+Le PGCD c'est L’abréviation du plus grand commun diviseur. C'est le plus grand nombre naturel qui “rassemble” deux entiers en divisant chacun d’eux sans jamais laisser de reste( le reste = 0 ).
+Autrement dit, c’est le plus grand facteur qu’ils partagent en toute égalité, le plus haut “niveau de compatibilité numérique” entre les deux.
+Souvent, on le voit comme une simple opération mathématique, mais on peut aussi le voir ainsi :
+C’est le lien le plus fort entre deux nombres, le plus grand nombre qui peut “se glisser” exactement dans chacun d’eux sans rien casser.
+Énoncer l’algorithme d’Euclid:
+L’algorithme d’Euclide permet de déterminer le PGCD de deux nombres entiers positifs 𝑎  et 𝑏  (avec 𝑎>𝑏 ) en utilisant le principe des divisions successives. Il repose sur le fait que :
+PGCD(a,b)=PGCD(b,r) où 𝑟 est le reste de la division de 𝑎 par 𝑏 .
+On répète cette opération (remplaçant à chaque fois 𝑎 par 𝑏 et 𝑏 par le reste 𝑟) jusqu’à obtenir un reste nul. Le dernier reste non nul est alors le PGCD des deux nombres.
+EXEMPLE:
+Si a = 64  et 𝑏=12
+→ 64 ÷ 12= 5 reste 4
+→ 12 ÷ 4 = 3 reste 0
+Donc PGCD(64,12) = 4
+
+
+#include <stdio.h>
+
+int main() {
+int a, b, r;  
+printf("Entrez deux entiers positifs : ");
+scanf("%d %d", &a, &b);
+    TANT QUE b n'est pas nul
+     while (b != 0) {
+                   r = a % b;  // Calcul du reste
+                   a = b;      // Remplacer a par b
+                   b = r;      // Remplacer b par le reste
+                   }
+
+             // Quand b devient 0, a contient le PGCD
+             printf("Le PGCD est : %d\n", a);
+ return 0;
+         }
