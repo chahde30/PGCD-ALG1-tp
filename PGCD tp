@@ -2,7 +2,17 @@ Définition du PGCD:
 Le PGCD c'est L’abréviation du plus grand commun diviseur. C'est le plus grand nombre naturel qui “rassemble” deux entiers en divisant chacun d’eux sans jamais laisser de reste( le reste = 0 ).
 Autrement dit, c’est le plus grand facteur qu’ils partagent en toute égalité, le plus haut “niveau de compatibilité numérique” entre les deux.
 Souvent, on le voit comme une simple opération mathématique, mais on peut aussi le voir ainsi :
-C’est le lien le plus fort entre deux nombres, le plus grand nombre qui peut “se glisser” exactement dans chacun d’eux sans rien casser.
+C’est le lien le plus fort entre deux nombres, le plus grand nombre qui peut “se glisser” exactement dans chacun d’eux sans rien casser.  
+EXEMPLE: PGCD(68, 25) 
+68 = 2 * 25 + 18
+25 = 1* 18 + 7
+18 = 2 * 7 + 4
+7 = 1* 4 + 3
+4 = 1 * 3 + 1
+3 = 3 * 1 +0
+PGCD(68, 25) = 1
+
+
 Énoncer l’algorithme d’Euclid:
 L’algorithme d’Euclide permet de déterminer le PGCD de deux nombres entiers positifs 𝑎  et 𝑏  (avec 𝑎>𝑏 ) en utilisant le principe des divisions successives. Il repose sur le fait que :
 PGCD(a,b)=PGCD(b,r) où 𝑟 est le reste de la division de 𝑎 par 𝑏 .
@@ -14,20 +24,78 @@ Si a = 64  et 𝑏=12
 Donc PGCD(64,12) = 4
 
 
+DEFINITION de theoreme de BEZOUT:
+Le théorème de Bézout concerne que le Plus Grand Commun Diviseur D de A et B, noté {PGCD}(A,B), est le plus petit entier positif qui peut
+s'écrire sous la forme d'une combinaison ou relation  linéaire de A et B.
+
+
+CODE DEMANDER:
+
 #include <stdio.h>
+#include <stdlib.h> 
+
+// Variable : A=a, B=b, C=c, D=pgcd, E=x0, F=y0
+
 
 int main() {
-int a, b, r;  
-printf("Entrez deux entiers positifs : ");
-scanf("%d %d", &a, &b);
-    TANT QUE b n'est pas nul
-     while (b != 0) {
-                   r = a % b;  // Calcul du reste
-                   a = b;      // Remplacer a par b
-                   b = r;      // Remplacer b par le reste
-                   }
+    while (B != 0) {
+        int temp = B;
+        B = A % B;
+        A = temp;
+    }
+    return abs(A); 
+}
 
-             // Quand b devient 0, a contient le PGCD
-             printf("Le PGCD est : %d\n", a);
- return 0;
-         }
+// 2. Algorithme d'Euclide étendu
+// Trouve D (PGCD), x et y tels que A*x + B*y = D
+int euclide_etendu(int A, int B, i) {
+    if (B == 0) {
+        *x= 1; 
+        *y= 0;
+        return A; // Le PGCD est A
+    }
+    
+    // Appel récursif : d = B*x1 + (A % B)*y1
+    int x1, y1;
+    int D = euclide_etendu(B, A % B, &x1, &y1);
+    
+    // Calcul des nouveaux coefficients : A*x + B*y = D
+    *x= y1;
+    *y= x1 - (A / B) * y1;
+    
+    return D;
+}
+
+int main() {
+    int A, B, C;      
+    int D;            // PGCD
+    int E, F;         // Solutions de x0, y0
+    int x_temp, y_temp;
+
+    printf("Entrer A, B, C pour l'équation Ax + By = C : ");
+    if (scanf("%d %d %d", &A, &B, &C) != 3) return 1;
+
+  
+    D = pgcd(A, B);
+    
+    
+    if (C % D != 0) {
+        printf("erreur":);
+        return 0;
+    }
+
+   
+    euclide_etendu(A, B, &x_temp, &y_temp); 
+    
+   
+    E = x_temp * (C / D); 
+    F = y_temp * (C / D); 
+
+ 
+    printf("Une solution particulière est : x0 = %d, y0 = %d\n", E, F);
+    printf("Solution générale (avec k appartenant à Z) :\n");
+    printf("x = %d + %d*k\n", E, B / D);
+    printf("y = %d - %d*k\n", F, A / D);
+
+    return 0;
+}
