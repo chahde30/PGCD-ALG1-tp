@@ -32,70 +32,87 @@ s'écrire sous la forme d'une combinaison ou relation  linéaire de A et B.
 CODE DEMANDER:
 
 #include <stdio.h>
-#include <stdlib.h> 
-
-// Variable : A=a, B=b, C=c, D=pgcd, E=x0, F=y0
 
 
-int main() {
+int pgcd(int a, int b) {
+    int A = a, B = b;
+    printf("\nEtapes du PGCD (algorithme d'Euclide) :\n");
     while (B != 0) {
-        int temp = B;
-        B = A % B;
-        A = temp;
+        int q = A / B;
+        int r = A % B;
+        printf("%d = %d * %d + %d\n", A, B, q, r);
+        A = B;
+        B = r;
     }
-    return abs(A); 
+    return A;
 }
 
-// 2. Algorithme d'Euclide étendu
-// Trouve D (PGCD), x et y tels que A*x + B*y = D
-int euclide_etendu(int A, int B, i) {
-    if (B == 0) {
-        *x= 1; 
-        *y= 0;
-        return A; // Le PGCD est A
+
+int euclide_etendu(int a, int b, int *x, int *y) {
+    int x1 = 1, y1 = 0;  // coeff pour a
+    int x2 = 0, y2 = 1;  // coeff pour b
+    int A = a, B = b;
+
+    while (B != 0) {
+        int q = A / B;
+        int r = A % B;
+
+        int X = x1 - q * x2;
+        int Y = y1 - q * y2;
+
+   
+        A = B;
+        B = r;
+        x1 = x2;
+        x2 = X;
+        y1 = y2;
+        y2 = Y;
     }
-    
-    // Appel récursif : d = B*x1 + (A % B)*y1
-    int x1, y1;
-    int D = euclide_etendu(B, A % B, &x1, &y1);
-    
-    // Calcul des nouveaux coefficients : A*x + B*y = D
-    *x= y1;
-    *y= x1 - (A / B) * y1;
-    
-    return D;
+
+    *x = x1;
+    *y = y1;
+    return A; 
 }
+
+
 
 int main() {
-    int A, B, C;      
-    int D;            // PGCD
-    int E, F;         // Solutions de x0, y0
-    int x_temp, y_temp;
+    int a, b, c;
 
-    printf("Entrer A, B, C pour l'équation Ax + By = C : ");
-    if (scanf("%d %d %d", &A, &B, &C) != 3) return 1;
+    printf("Entrer les valeurs de a, b et c : ");
+    scanf("%d %d %d", &a, &b, &c);
 
-  
-    D = pgcd(A, B);
-    
-    
-    if (C % D != 0) {
-        printf("erreur":);
+    printf("      RESOLUTION :  %d x + %d y = %d\n", a, b, c);
+
+   
+    int d = pgcd(a, b);
+    printf("1) PGCD(%d, %d) = %d\n", a, b, d);
+
+    if (c % d != 0) {
+        printf("\n=> Pas de solution entiere car %d ne divise pas %d.\n", d, c);
         return 0;
     }
 
-   
-    euclide_etendu(A, B, &x_temp, &y_temp); 
-    
-   
-    E = x_temp * (C / D); 
-    F = y_temp * (C / D); 
+    printf("- Il existe des solutions entieres car %d divise %d.\n\n", d, c);
 
- 
-    printf("Une solution particulière est : x0 = %d, y0 = %d\n", E, F);
-    printf("Solution générale (avec k appartenant à Z) :\n");
-    printf("x = %d + %d*k\n", E, B / D);
-    printf("y = %d - %d*k\n", F, A / D);
+
+    int x0, y0;
+    int d2 = euclide_etendu(a, b, &x0, &y0);
+
+    printf("2) Bezout : %d = (%d)(%d) + (%d)(%d)\n", d2, a, x0, b, y0);
+
+    
+    int x1 = x0 * (c / d);
+    int y1 = y0 * (c / d);
+
+    printf("\nSolution particuliere : (x1, y1) = (%d, %d)\n", x1, y1);
+
+    
+    printf("\n3) Solution generale :\n");
+    printf("   (x, y) = (%d + (%d/d)*b*k, %d - (%d/d)*a*k), \n", x1, c, y1, c);
+    printf("   ou de façon simple : x = x1 + (b/d)k, y = y1 - (a/d)k,/n ");
+
+
 
     return 0;
 }
